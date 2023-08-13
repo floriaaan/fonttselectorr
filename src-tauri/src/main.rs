@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::{self, Write};
 
 #[tauri::command]
-fn save_image(image: &str) -> bool {
+fn save_image(image: &str, save_folder: &str, text: &str) -> bool {
     // Split the data URL into its components
     let parts: Vec<&str> = image.split(",").collect();
     if parts.len() != 2 {
@@ -18,11 +18,13 @@ fn save_image(image: &str) -> bool {
     let decoded_data =
         base64::decode(encoded_data).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e));
 
-    // Create and write the decoded data to the specified file path
-    let mut file = match File::create(
-        // current_dir().unwrap().join("image.png")
-        "image.png"
-    ) {
+    let seperator = std::path::MAIN_SEPARATOR;
+
+    // file name is text_year_month_day.png
+    let file_name = format!("{}_{}.png", text, chrono::Local::now().format("%Y_%m_%d"));
+    let path = format!("{}{}{}", save_folder, seperator, file_name);
+
+    let mut file = match File::create(path.clone().as_str()) {
         Ok(file) => file,
         Err(e) => {
             eprintln!("Error creating file: {}", e);
@@ -36,15 +38,9 @@ fn save_image(image: &str) -> bool {
     return true;
 }
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![save_image])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
