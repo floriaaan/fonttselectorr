@@ -10,32 +10,114 @@ import { Store } from "tauri-plugin-store-api";
 import { toast } from "react-hot-toast";
 const store = new Store(".settings.dat");
 
-const FONTS = [
-  "Mockary Personal",
-  "Comic Sans MS",
-  "Golden Hills DEMO",
-  "Hello Valentica",
-  "Mailine Personal User",
-  "Sindentosa",
-  "French Script MT",
-  "Beauty Queen Script",
-  "Cac Lasko Even Weight",
-  "Brush Script MT",
-  "Charlie",
-  "Janda Swirly Twirly",
-  "Ink Free",
-  "Harrigton",
-  "Civitype FG",
-  "BillyanaPersonalUseOnly",
-  "Marguaritas",
-  "Cursive Standard",
-  "Qwerty Ability-PersonalUse",
-  "White Dream PERSO",
-  "Femina",
-  "Lovely Valentine",
-  "From Me 2 You",
-  "Autography",
-  "PrettyGirlsScriptDemo",
+import { CSSProperties } from "react";
+
+interface Font {
+  name: string;
+  styles: CSSProperties[];
+}
+
+const FONTS: Font[] = [
+  {
+    name: "Mockary Personal",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Comic Sans MS",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Golden Hills DEMO",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Hello Valentica",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Mailine Personal User",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Sindentosa",
+    styles: [{ fontWeight: 700 }, { fontWeight: 400, fontStyle: "italic" }],
+  },
+  {
+    name: "French Script MT",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Beauty Queen Script",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Cac Lasko Even Weight",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Brush Script MT",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Charlie",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Janda Swirly Twirly",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Ink Free",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Harrigton",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "Civitype FG",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "BillyanaPersonalUseOnly",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Marguaritas",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Cursive Standard",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Qwerty Ability-PersonalUse",
+    styles: [{ fontWeight: 700 }],
+  },
+  {
+    name: "White Dream PERSO",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Femina",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Lovely Valentine",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "From Me 2 You",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "Autography",
+    styles: [{ fontWeight: 400 }],
+  },
+  {
+    name: "PrettyGirlsScriptDemo",
+    styles: [{ fontWeight: 700 }],
+  },
 ];
 
 function App() {
@@ -135,14 +217,22 @@ function App() {
         ref={elementRef}
       >
         {FONTS.map((font, i) => (
-          <div className="inline-flex items-center w-full gap-2" key={font}>
+          <div
+            className="inline-flex items-center w-full gap-2"
+            key={font.name}
+          >
             <p className="w-3 text-xs">{i + 1}</p>
-            <p
-              className="px-2 text-center bg-gray-100 rounded-md min-w-[100px]"
-              style={{ fontFamily: font }}
-            >
-              {text}
-            </p>
+            {font.styles.map((style) => (
+              <p
+                className="px-2 text-center bg-gray-100 rounded-md min-w-[100px]"
+                style={{
+                  ...style,
+                  fontFamily: font.name,
+                }}
+              >
+                {text}
+              </p>
+            ))}
           </div>
         ))}
       </div>
